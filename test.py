@@ -6,7 +6,7 @@ from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, UniPCM
 from diffusers.utils import load_image
 
 from transformers import AutoImageProcessor, UperNetForSemanticSegmentation
-
+from tqdm import tqdm
 
 shape = (1024,1024)
 scale = 100.0
@@ -71,6 +71,6 @@ cache_dir="./models"
 pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
 
 img_in = img
-for i in range(10):
-      img_in = pipe("Create a landscape of ocean, land, and beach using only the colors {blue}, {green}, and {beach} for blue green and yellow and no other colors. Emualte the style of a 8bit game", img_in, num_inference_steps=20).images[0]
+for i in tqdm(range(50)):
+      img_in = pipe("Create a landscape of ocean, land, and beach using only the colors {blue}, {green}, and {beach} for blue green and yellow and no other colors. Emualte the style of a 8bit game", img_in, num_inference_steps=20, VERBOSE = False).images[0]
       img_in.save(f'./images/diffusion{i}.png')
