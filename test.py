@@ -63,11 +63,11 @@ img.save('./images/procedual.png')
 controlnet = ControlNetModel.from_pretrained(
 "lllyasviel/sd-controlnet-seg",
 cache_dir="./models"
-)
+).to("cuda")
 pipe = StableDiffusionControlNetPipeline.from_pretrained(
 "runwayml/stable-diffusion-v1-5", controlnet=controlnet, safety_checker=None,
 cache_dir="./models"
-)
+).to("cuda")
 pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
 
 
