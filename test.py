@@ -56,7 +56,7 @@ def add_color(world):
 color_world = add_color(world)
 color_world = color_world.astype(np.uint8)
 img_color = Image.fromarray(color_world, mode='RGB')
-img.save('./images/procedual.png')
+img_color.save('./images/procedual.png')
 
 
 
@@ -70,7 +70,7 @@ cache_dir="./models"
 ).to("cuda")
 pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
 
-
-
-image_controlnet = pipe("Create a landscape of ocean, land, and beach using only the colors {blue}, {green}, and {beach} for blue green and yellow and no other colors. Emualte the style of a 8bit game", img, num_inference_steps=20).images[0]
-image_controlnet.save('./images/diffusion.png')
+img_in = img
+for i in range(10):
+      img_in = pipe("Create a landscape of ocean, land, and beach using only the colors {blue}, {green}, and {beach} for blue green and yellow and no other colors. Emualte the style of a 8bit game", img_in, num_inference_steps=20).images[0]
+      img_in.save(f'./images/diffusion{i}.png')
