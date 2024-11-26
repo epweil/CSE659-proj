@@ -36,7 +36,7 @@ def add_color(world):
 
 if __name__ == "__main__":
       
-      for scale in np.linspace(100,500, 4):
+      for scale in tqdm(np.linspace(100,500, 4)):
             for persistence in np.linspace(0,1, 4):
                   for octaves in np.linspace(1,10, 4):
                         for lacunarity in np.linspace(0,10, 4):
