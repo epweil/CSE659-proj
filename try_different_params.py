@@ -35,55 +35,50 @@ def add_color(world):
 
 
 if __name__ == "__main__":
-      
+      controlnet = ControlNetModel.from_pretrained(
+                                    "lllyasviel/sd-controlnet-seg",
+                                    cache_dir="./models"
+                                    ).to("cuda")
+      pipe = StableDiffusionControlNetPipeline.from_pretrained(
+      "runwayml/stable-diffusion-v1-5", controlnet=controlnet, safety_checker=None,
+      cache_dir="./models"
+      ).to("cuda")
+      pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
+      pipe.enable_progress_bar = False
       for scale in tqdm(np.linspace(100,512, 4)):
-            for persistence in np.linspace(1,1, 4):
+            for persistence in np.linspace(1,10, 4):
                   for octaves in np.linspace(2,10, 4):
                         for lacunarity in np.linspace(1,10, 4):
                               proj_name = f"scale-{scale}-persistence-{persistence}-octaves-{octaves}-lacunarity-{lacunarity}"  
                               dir = f'./tests/{proj_name}/'  
-                              if(os.path.exists(dir)):
-                                    os.rmdir(dir)     
-                              os.mkdir(dir)
-                              shape = (512,512)
-                              world = np.zeros(shape)
-                              for i in range(shape[0]):
-                                    for j in range(shape[1]):
-                                          world[i][j] = noise.pnoise2(i/scale, 
-                                                                        j/scale, 
-                                                                        octaves=int(octaves), 
-                                                                        persistence=persistence, 
-                                                                        lacunarity=lacunarity, 
-                                                                        repeatx=shape[0], 
-                                                                        repeaty=shape[1], 
-                                                                        base=0)
-                              world_norm = (world  - world.min()) / (world.max() - world.min()) * 255
-                              world_norm = world_norm.astype(np.uint8)
-                              img = Image.fromarray(world_norm, mode='L')
-                              img.save(f'{dir}/noise.png')
+                              if( not os.path.exists(dir)):
+                                    os.mkdir(dir)
+                                    shape = (512,512)
+                                    world = np.zeros(shape)
+                                    for i in range(shape[0]):
+                                          for j in range(shape[1]):
+                                                world[i][j] = noise.pnoise2(i/scale, 
+                                                                              j/scale, 
+                                                                              octaves=int(octaves), 
+                                                                              persistence=persistence, 
+                                                                              lacunarity=lacunarity, 
+                                                                              repeatx=shape[0], 
+                                                                              repeaty=shape[1], 
+                                                                              base=0)
+                                    world_norm = (world  - world.min()) / (world.max() - world.min()) * 255
+                                    world_norm = world_norm.astype(np.uint8)
+                                    img = Image.fromarray(world_norm, mode='L')
+                                    img.save(f'{dir}/noise.png')
 
 
-                              blue = [65,105,225]
-                              green = [34,139,34]
-                              beach = [238, 214, 175]
+                                    blue = [65,105,225]
+                                    green = [34,139,34]
+                                    beach = [238, 214, 175]
 
-                              color_world = add_color(world)
-                              color_world = color_world.astype(np.uint8)
-                              img_color = Image.fromarray(color_world, mode='RGB')
-                              img_color.save(f'{dir}/procedual.png')
+                                    color_world = add_color(world)
+                                    color_world = color_world.astype(np.uint8)
+                                    img_color = Image.fromarray(color_world, mode='RGB')
+                                    img_color.save(f'{dir}/procedual.png')
 
-
-
-                              controlnet = ControlNetModel.from_pretrained(
-                              "lllyasviel/sd-controlnet-seg",
-                              cache_dir="./models"
-                              ).to("cuda")
-                              pipe = StableDiffusionControlNetPipeline.from_pretrained(
-                              "runwayml/stable-diffusion-v1-5", controlnet=controlnet, safety_checker=None,
-                              cache_dir="./models"
-                              ).to("cuda")
-                              pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
-                              pipe.enable_progress_bar = False
-
-                              img_diffusion = pipe("Create a two dimensional game region of the ocean, beach, mountains, grass, and snow.", img, num_inference_steps=20).images[0]
-                              img_diffusion.save(f'{dir}/diffusion.png')
+                                    img_diffusion = pipe("Create a two dimensional game region of the ocean, beach, mountains, grass, and snow.", img, num_inference_steps=20).images[0]
+                                    img_diffusion.save(f'{dir}/diffusion.png')
