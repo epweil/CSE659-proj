@@ -69,8 +69,8 @@ pipe = StableDiffusionControlNetPipeline.from_pretrained(
 cache_dir="./models"
 ).to("cuda")
 pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
-
+pipe.enable_progress_bar = False
 img_in = img
-for i in tqdm(range(50)):
+for i in tqdm(range(200)):
       img_in = pipe("Create a landscape of ocean, land, and beach using only the colors {blue}, {green}, and {beach} for blue green and yellow and no other colors. Emualte the style of a 8bit game", img_in, num_inference_steps=20, VERBOSE = False).images[0]
       img_in.save(f'./images/diffusion{i}.png')
