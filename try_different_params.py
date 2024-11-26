@@ -37,13 +37,16 @@ def add_color(world):
 if __name__ == "__main__":
       
       for scale in np.linspace(100,500, 4):
+            scale = int(scale)
             for persistence in np.linspace(0,1, 4):
                   for octaves in np.linspace(0,10, 4):
                         for lacunarity in np.linspace(0,10, 4):
                               proj_name = f"scale-{scale}-persistence-{persistence}-octaves-{octaves}-lacunarity-{lacunarity}"  
-                              dir = f'./tests/{proj_name}/'          
+                              dir = f'./tests/{proj_name}/'  
+                              if(os.path.exists(dir)):
+                                    os.rmdir(dir)     
                               os.mkdir(dir)
-                              shape = (256,256)
+                              shape = (512,512)
                         
                               world = np.zeros(shape)
                               for i in range(shape[0]):
@@ -53,8 +56,8 @@ if __name__ == "__main__":
                                                                         octaves=octaves, 
                                                                         persistence=persistence, 
                                                                         lacunarity=lacunarity, 
-                                                                        repeatx=1024, 
-                                                                        repeaty=1024, 
+                                                                        repeatx=shape[0], 
+                                                                        repeaty=shape[1], 
                                                                         base=0)
                               world_norm = (world  - world.min()) / (world.max() - world.min()) * 255
                               world_norm = world_norm.astype(np.uint8)
