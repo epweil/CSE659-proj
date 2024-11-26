@@ -36,10 +36,10 @@ def add_color(world):
 
 if __name__ == "__main__":
       
-      for scale in tqdm(np.linspace(100,500, 4)):
-            for persistence in np.linspace(0,1, 4):
-                  for octaves in np.linspace(1,10, 4):
-                        for lacunarity in np.linspace(0,10, 4):
+      for scale in tqdm(np.linspace(100,512, 4)):
+            for persistence in np.linspace(1,1, 4):
+                  for octaves in np.linspace(2,10, 4):
+                        for lacunarity in np.linspace(1,10, 4):
                               proj_name = f"scale-{scale}-persistence-{persistence}-octaves-{octaves}-lacunarity-{lacunarity}"  
                               dir = f'./tests/{proj_name}/'  
                               if(os.path.exists(dir)):
