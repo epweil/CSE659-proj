@@ -34,7 +34,7 @@ if __name__ == "__main__":
       if (len(sys.argv) == 1):
             raise Exception("Project Name???") 
       proj_name = sys.argv[1]
-      if(os.path.isdir(f'./images/{proj_name}/') and en(os.listdir(f'./images/{proj_name}/')) > 0):
+      if(os.path.isdir(f'./images/{proj_name}/') and len(os.listdir(f'./images/{proj_name}/')) > 0):
             raise Exception("Project Exists") 
       os.mkdir(f'./images/{proj_name}')
       shape = (1024,1024)
