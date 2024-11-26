@@ -30,7 +30,12 @@ def add_color(world):
 
 
 if __name__ == "__main__":
+      
+      if (len(sys.argv) == 1):
+            raise Exception("Project Name???") 
       proj_name = sys.argv[1]
+      if(os.path.isdir(f'./images/{proj_name}/') and en(os.listdir(f'./images/{proj_name}/')) > 0):
+            raise Exception("Project Exists") 
       os.mkdir(f'./images/{proj_name}')
       shape = (1024,1024)
       scale = 100.0
@@ -52,7 +57,7 @@ if __name__ == "__main__":
       world_norm = (world  - world.min()) / (world.max() - world.min()) * 255
       world_norm = world_norm.astype(np.uint8)
       img = Image.fromarray(world_norm, mode='L')
-      img.save('./images/{proj_name}/noise.png')
+      img.save(f'./images/{proj_name}/noise.png')
 
 
       blue = [65,105,225]
@@ -62,7 +67,7 @@ if __name__ == "__main__":
       color_world = add_color(world)
       color_world = color_world.astype(np.uint8)
       img_color = Image.fromarray(color_world, mode='RGB')
-      img_color.save('./images/{proj_name}/procedual.png')
+      img_color.save(f'./images/{proj_name}/procedual.png')
 
 
 
