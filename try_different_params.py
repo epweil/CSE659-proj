@@ -36,7 +36,7 @@ def add_color(world):
 
 if __name__ == "__main__":
       controlnet = ControlNetModel.from_pretrained(
-                                    "lllyasviel/sd-controlnet-seg",
+                                    "lllyasviel/sd-controlnet-depth",
                                     cache_dir="./models"
                                     ).to("cuda")
       pipe = StableDiffusionControlNetPipeline.from_pretrained(
@@ -50,7 +50,7 @@ if __name__ == "__main__":
                   for octaves in np.linspace(2,10, 4):
                         for lacunarity in np.linspace(1,10, 4):
                               proj_name = f"scale-{scale}-persistence-{persistence}-octaves-{octaves}-lacunarity-{lacunarity}"  
-                              dir = f'./tests/{proj_name}/'  
+                              dir = f'./tests2/{proj_name}/'  
                               if( not os.path.exists(dir)):
                                     os.mkdir(dir)
                                     shape = (512,512)
